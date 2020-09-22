@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LibraryModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="Author">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Lastname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Books" Relationship="LibraryModel.FK__Books__AuthorId__29572725" FromRole="Author" ToRole="Book" />
+  </EntityType>
+  <EntityType Name="Genre">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Books" Relationship="LibraryModel.FK__Books__GenreId__286302EC" FromRole="Genre" ToRole="Book" />
+  </EntityType>
+  <EntityType Name="Librarian">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Lastname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="IsAdmin" Type="Boolean" Nullable="false" />
+    <Property Name="Confirmed" Type="Boolean" Nullable="false" />
+    <Property Name="Deleted" Type="Boolean" Nullable="false" />
+    <Property Name="Password" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <NavigationProperty Name="Rents" Relationship="LibraryModel.FK__Rent__LibrarianI__4E88ABD4" FromRole="Librarian" ToRole="Rent" />
+  </EntityType>
+  <EntityContainer Name="LibraryEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="Authors" EntityType="Self.Author" />
+    <EntitySet Name="Genres" EntityType="Self.Genre" />
+    <EntitySet Name="Librarians" EntityType="Self.Librarian" />
+    <EntitySet Name="Books" EntityType="LibraryModel.Book" />
+    <AssociationSet Name="FK__Books__AuthorId__29572725" Association="LibraryModel.FK__Books__AuthorId__29572725">
+      <End Role="Author" EntitySet="Authors" />
+      <End Role="Book" EntitySet="Books" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Books__GenreId__286302EC" Association="LibraryModel.FK__Books__GenreId__286302EC">
+      <End Role="Genre" EntitySet="Genres" />
+      <End Role="Book" EntitySet="Books" />
+    </AssociationSet>
+    <EntitySet Name="Customers" EntityType="LibraryModel.Customer" />
+    <EntitySet Name="Rents" EntityType="LibraryModel.Rent" />
+    <AssociationSet Name="FK__Rent__BookId__4F7CD00D" Association="LibraryModel.FK__Rent__BookId__4F7CD00D">
+      <End Role="Book" EntitySet="Books" />
+      <End Role="Rent" EntitySet="Rents" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Rent__CustomerId__5070F446" Association="LibraryModel.FK__Rent__CustomerId__5070F446">
+      <End Role="Customer" EntitySet="Customers" />
+      <End Role="Rent" EntitySet="Rents" />
+    </AssociationSet>
+    <AssociationSet Name="FK__Rent__LibrarianI__4E88ABD4" Association="LibraryModel.FK__Rent__LibrarianI__4E88ABD4">
+      <End Role="Librarian" EntitySet="Librarians" />
+      <End Role="Rent" EntitySet="Rents" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="Book">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="GenreId" Type="Int32" />
+    <Property Name="AuthorId" Type="Int32" />
+    <Property Name="Year" Type="Int32" />
+    <Property Name="Pagecount" Type="Int32" />
+    <Property Name="Count" Type="Int32" />
+    <Property Name="Deleted" Type="Boolean" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <NavigationProperty Name="Author" Relationship="LibraryModel.FK__Books__AuthorId__29572725" FromRole="Book" ToRole="Author" />
+    <NavigationProperty Name="Genre" Relationship="LibraryModel.FK__Books__GenreId__286302EC" FromRole="Book" ToRole="Genre" />
+    <NavigationProperty Name="Rents" Relationship="LibraryModel.FK__Rent__BookId__4F7CD00D" FromRole="Book" ToRole="Rent" />
+  </EntityType>
+  <Association Name="FK__Books__AuthorId__29572725">
+    <End Type="LibraryModel.Author" Role="Author" Multiplicity="0..1" />
+    <End Type="LibraryModel.Book" Role="Book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Author">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Book">
+        <PropertyRef Name="AuthorId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Books__GenreId__286302EC">
+    <End Type="LibraryModel.Genre" Role="Genre" Multiplicity="0..1" />
+    <End Type="LibraryModel.Book" Role="Book" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Genre">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Book">
+        <PropertyRef Name="GenreId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityType Name="Customer">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Lastname" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Deleted" Type="Boolean" Nullable="false" />
+    <NavigationProperty Name="Rents" Relationship="LibraryModel.FK__Rent__CustomerId__5070F446" FromRole="Customer" ToRole="Rent" />
+  </EntityType>
+  <EntityType Name="Rent">
+    <Key>
+      <PropertyRef Name="Id" />
+    </Key>
+    <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="Date" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="LibrarianId" Type="Int32" />
+    <Property Name="BookId" Type="Int32" />
+    <Property Name="BookName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CustomerName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CustomerLastName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="CustomerId" Type="Int32" />
+    <Property Name="Status" Type="Boolean" Nullable="false" />
+    <Property Name="Overdue" Type="Boolean" Nullable="false" />
+    <Property Name="Returndate" Type="DateTime" Nullable="false" Precision="3" />
+    <Property Name="Count" Type="Int32" Nullable="false" />
+    <Property Name="Price" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <Property Name="Penalty" Type="Decimal" Nullable="false" Precision="10" Scale="2" />
+    <NavigationProperty Name="Book" Relationship="LibraryModel.FK__Rent__BookId__4F7CD00D" FromRole="Rent" ToRole="Book" />
+    <NavigationProperty Name="Customer" Relationship="LibraryModel.FK__Rent__CustomerId__5070F446" FromRole="Rent" ToRole="Customer" />
+    <NavigationProperty Name="Librarian" Relationship="LibraryModel.FK__Rent__LibrarianI__4E88ABD4" FromRole="Rent" ToRole="Librarian" />
+  </EntityType>
+  <Association Name="FK__Rent__BookId__4F7CD00D">
+    <End Type="LibraryModel.Book" Role="Book" Multiplicity="0..1" />
+    <End Type="LibraryModel.Rent" Role="Rent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Book">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rent">
+        <PropertyRef Name="BookId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Rent__CustomerId__5070F446">
+    <End Type="LibraryModel.Customer" Role="Customer" Multiplicity="0..1" />
+    <End Type="LibraryModel.Rent" Role="Rent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Customer">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rent">
+        <PropertyRef Name="CustomerId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK__Rent__LibrarianI__4E88ABD4">
+    <End Type="LibraryModel.Librarian" Role="Librarian" Multiplicity="0..1" />
+    <End Type="LibraryModel.Rent" Role="Rent" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Librarian">
+        <PropertyRef Name="Id" />
+      </Principal>
+      <Dependent Role="Rent">
+        <PropertyRef Name="LibrarianId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>
